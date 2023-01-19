@@ -509,7 +509,7 @@ class GetBDXPath:
                     if (int(inputFrom) <= len(self.bdx_list)):
                         inputFrom = self.bdx_list[int(inputFrom)-1]
                     else:
-                        print ("输入序号错误")
+                        print ("未找到此序号")
                         inputFrom = ""
         else:
             while (inputFrom.strip() == ""):
