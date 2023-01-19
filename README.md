@@ -21,7 +21,7 @@ python convert.py [inputPath] [outputPath]
 apt install python && apt install git && pip install brotli -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com && cd /sdcard/Download && git clone https://github.com/KazamataNeri/MCConvertExecute_bdx.git && cd MCConvertExecute_bdx
 ```
 2. 然后在 `Termux` 执行命令 `python convert.py` <br>
-#### `Termux`下载速度过慢?
+#### `Termux`官方源下载速度过慢?
  - [替换为TUNA源](https://mirrors.tuna.tsinghua.edu.cn/help/termux/)
 
 ## 什么是.bdx？
