@@ -20,7 +20,9 @@ python convert.py [inputPath] [outputPath]
 ```shell
 apt install python && apt install git && pip install brotli -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com && cd /sdcard/Download && git clone https://github.com/KazamataNeri/MCConvertExecute_bdx.git && cd MCConvertExecute_bdx
 ```
-2. 然后在 `Termux` 执行命令 `python convert.py` 
+2. 然后在 `Termux` 执行命令 `python convert.py` <br>
+#### `Termux`下载速度过慢?
+ - [替换为TUNA源](https://mirrors.tuna.tsinghua.edu.cn/help/termux/)
 
 ## 什么是.bdx？
 1.  `FastBuilder`支持`.bdx`文件，所以您可以使用`FastBuilder`导入`中国-我的世界基岩版服务器`中的建筑
