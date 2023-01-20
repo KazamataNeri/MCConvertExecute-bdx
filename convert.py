@@ -115,8 +115,8 @@ class BDump:
         if (printf):
             return jump+4
         #---
-        tmp = MCConvertExecute()
-        newexecute = tmp.main(command)
+        ConvertExecute = MCConvertExecute()
+        newexecute = ConvertExecute.main(command,self.prt,self.bdxDataLen)
         returnstr = returnstr + newexecute.encode('utf-8') + \
                     data[i+commandend:i+jump+1] + b'\x01' + data[i+jump+2:i+jump+4]
         #print (f"command: {command}")
@@ -304,7 +304,7 @@ class MCConvertExecute:
                 self.list_len = list_len
     
     #------------
-    def main(self,oldExecute):
+    def main(self,oldExecute,BDumpPrt=0,BDumpLen=0):
         self.oldExecute = oldExecute
         self.oldExeLenght = len(oldExecute)
         self.prt = 0
@@ -325,7 +325,10 @@ class MCConvertExecute:
         newExecute = self.SyntaxConversion(splitExecute_list)
         print (f"command: {oldExecute}")
         print (f"     to: {newExecute}")
-        print ("-------------")
+        if (BDumpLen == 0):
+            print ("-------------")
+        else:
+            print("------- {:.1f}% ------".format(BDumpPrt/BDumpLen*100))
         return newExecute
 
     #---------------
