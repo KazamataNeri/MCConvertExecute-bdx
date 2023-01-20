@@ -18,9 +18,11 @@ python convert.py [inputPath] [outputPath]
 下载和使用<br>
 1. 在 Termux 执行此命令：
 ```shell
-apt install python && apt install git && pip install brotli -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com && cd /sdcard/Download && git clone https://github.com/KazamataNeri/MCConvertExecute-bdx.git && cd MCConvertExecute_bdx
+apt install python && apt install git && pip install brotli -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com && cd /sdcard/Download && git clone https://github.com/KazamataNeri/MCConvertExecute-bdx.git && cd MCConvertExecute-bdx
 ```
 2. 然后在 `Termux` 执行命令 `python convert.py` <br>
+   - `convert.py` 文件在目录 `/sdcard/Download/MCConvertExecute-bdx`
+ ***
 #### `Termux`官方源下载速度过慢?
  - [替换为TUNA源](https://mirrors.tuna.tsinghua.edu.cn/help/termux/)
 
