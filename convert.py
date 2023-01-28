@@ -315,7 +315,7 @@ class MCConvertExecute:
         if (oldExecute[0] != "/"):
             if (self.isalpha(oldExecute[0])):
                 oldExecute = "/" + oldExecute
-        if (oldExecute[:9] != "/execute "):
+        if (not (oldExecute[:9] == "/execute " or oldExecute[:9] == "/Execute ")):
             return oldExecute
         #------
         while(self.exit()):
@@ -334,7 +334,7 @@ class MCConvertExecute:
     #---------------
     def SyntaxConversion(self,splitExecute_list):
         """ /execute 
-            @a[选择器] > at @a[选择器]
+            @a[选择器] > at @a[选择器] as @s
             ~ ~ ~ >  positioned ~ ~ ~ 
             detect ~ ~ ~ glass 0 > if block ~ ~ ~ glass 0
             然后在尾部添加 run 
@@ -347,7 +347,7 @@ class MCConvertExecute:
                 if (Command_header):
                     execstr = execstr + exe_list[0] + " "
                     Command_header = False
-                execstr = execstr + "at "+ exe_list[1] +" "
+                execstr = execstr + "at "+ exe_list[1] +" as @s "
                 if (exe_list[2] != "~ ~ ~"):
                     execstr = execstr + "positioned " + exe_list[2] + " "
                 if (spexe.list_len == 7):
@@ -368,20 +368,28 @@ class MCConvertExecute:
             oldExe = "/" + oldExe 
             self.prt = self.prt - 1
         
-        if (self.ifexit(oldExe[:9] == "/execute ")):
+        if (self.ifexit(oldExe[:9] == "/execute " or oldExe[:9] == "/Execute ")):
             self.local_prt = 9
-            execute_list.append(oldExe[:8])
+            execute_list.append("/execute")
             self.local_prt_Add(self.SpaceEnd())
         else:
             self.exit_interpret = True
 
-        if (self.ifexit(oldExe[self.local_prt:self.local_prt+1] == "@")):
-            str_len = self.findSpace()
-            execute_list.append(oldExe[self.local_prt:self.local_prt+str_len])
-            self.local_prt_Add(str_len)
-            self.local_prt_Add(self.SpaceEnd())
-        else:
-            self.exit_interpret = True
+        if (self.exit()):
+            str_len = self.findSpaceAndSelector()
+            selector = oldExe[self.local_prt:self.local_prt+str_len]
+            if (oldExe[self.local_prt:self.local_prt+1] == "@"):
+                self.local_prt_Add(str_len)
+                self.local_prt_Add(self.SpaceEnd())
+                if(oldExe[self.local_prt:self.local_prt+1] == "["):
+                    str_len = self.SelectorEnd()
+                    selector = selector + oldExe[self.local_prt:self.local_prt+str_len]
+                    self.local_prt_Add(str_len)
+                    self.local_prt_Add(self.SpaceEnd())
+            else:
+                self.local_prt_Add(str_len)
+                self.local_prt_Add(self.SpaceEnd())
+            execute_list.append(selector)
 
         if (self.exit()):
             execute_list.append(self.getCoordinate(oldExe))
@@ -391,25 +399,29 @@ class MCConvertExecute:
                 return exeStructure
         #----
         if (self.exit()):
-            if (oldExe[self.local_prt:self.local_prt+7] == "detect "):
+            if (oldExe[self.local_prt:self.local_prt+6] == "detect"):
                 execute_list.append(oldExe[self.local_prt:self.local_prt+6])
                 self.local_prt_Add(self.SpaceEnd() + 6)
             else:
-                self.prt = self.prt + self.local_prt    
+                self.prt = self.prt + self.local_prt
                 exeStructure.setExecuteType("execute",execute_list,3)
                 return exeStructure
+
         if (self.exit()):
+            self.local_prt_Add(self.SpaceEnd())
             execute_list.append(self.getCoordinate(oldExe))
 
         if (self.exit()):
             str_len = self.findSpace()
             execute_list.append(oldExe[self.local_prt:self.local_prt+str_len])
-            self.local_prt_Add(str_len + self.SpaceEnd())
+            self.local_prt_Add(str_len)
+            self.local_prt_Add(self.SpaceEnd())
 
         if (self.ifexit(self.isCoord(oldExe[self.local_prt:self.local_prt+1]))):
             str_len = self.findSpace()
             execute_list.append(oldExe[self.local_prt:self.local_prt+str_len])
-            self.local_prt_Add(str_len + self.SpaceEnd())
+            self.local_prt_Add(str_len)
+            self.local_prt_Add(self.SpaceEnd())
             self.prt = self.prt + self.local_prt
             exeStructure.setExecuteType("execute",execute_list,7)
             return exeStructure
@@ -463,7 +475,9 @@ class MCConvertExecute:
         i = self.prt + self.local_prt+1
         leng = 0
         while(i < self.oldExeLenght):
-            if (self.oldExecute[i] == ' ' or self.oldExecute[i] == '~' or self.oldExecute[i] == "^"):
+            if (self.oldExecute[i] == ' ' or self.oldExecute[i] == '~' or \
+                self.oldExecute[i] == "^" or self.oldExecute[i] == "/" or \
+                self.isalpha(self.oldExecute[i])):
                 return leng+1
             i = i+1
             leng = leng+1
@@ -480,7 +494,37 @@ class MCConvertExecute:
             leng = leng+1
         self.exit_interpret = True
         return 0
+
+    def findSpaceAndSelector(self):
+        i = self.prt + self.local_prt
+        leng = 0
+        while(i < self.oldExeLenght):
+            if (self.oldExecute[i] == ' ' or self.oldExecute[i] == '[' or \
+                self.oldExecute[i] == '~' or self.oldExecute[i] == "^" or \
+                self.oldExecute[i] == "-"):
+                return leng
+            i = i+1
+            leng = leng+1
+        self.exit_interpret = True
+        return 0
         
+    def SelectorEnd(self):
+        i = self.prt + self.local_prt
+        leng = 0
+        jump = False
+        while(i < self.oldExeLenght):
+            if (self.oldExecute[i] == '"'):
+                if (jump):
+                    jump = False
+                else:
+                    jump = True
+            if (not jump and self.oldExecute[i] == ']'):
+                return leng+1
+            i = i+1
+            leng = leng+1
+        self.exit_interpret = True
+        return leng
+
     def SpaceEnd(self):
         i = self.prt + self.local_prt
         leng = 0
