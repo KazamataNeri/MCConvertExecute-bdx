@@ -336,7 +336,7 @@ class MCConvertExecute:
     #---------------
     def SyntaxConversion(self,splitExecute_list):
         """ /execute 
-            @a[选择器] > at @a[选择器] as @s
+            @a[选择器] > as @a[选择器] at @s
             ~ ~ ~ >  positioned ~ ~ ~ 
             detect ~ ~ ~ glass 0 > if block ~ ~ ~ glass 0
             然后在尾部添加 run 
@@ -378,7 +378,7 @@ class MCConvertExecute:
             self.exit_interpret = True
 
         if (self.exit()):
-            str_len = self.findSpaceAndSelector()
+            str_len = self.findSpaceOrSelector()
             selector = oldExe[self.local_prt:self.local_prt+str_len]
             if (oldExe[self.local_prt:self.local_prt+1] == "@"):
                 self.local_prt_Add(str_len)
@@ -388,6 +388,12 @@ class MCConvertExecute:
                     selector = selector + oldExe[self.local_prt:self.local_prt+str_len]
                     self.local_prt_Add(str_len)
                     self.local_prt_Add(self.SpaceEnd())
+            elif (oldExe[self.local_prt:self.local_prt+1] == "\""):
+                self.local_prt_Add(1)
+                str_len = self.targetSpace()
+                selector = oldExe[self.local_prt-1:self.local_prt+str_len]
+                self.local_prt_Add(str_len)
+                self.local_prt_Add(self.SpaceEnd())
             else:
                 self.local_prt_Add(str_len)
                 self.local_prt_Add(self.SpaceEnd())
@@ -497,7 +503,7 @@ class MCConvertExecute:
         self.exit_interpret = True
         return 0
 
-    def findSpaceAndSelector(self):
+    def findSpaceOrSelector(self):
         i = self.prt + self.local_prt
         leng = 0
         while(i < self.oldExeLenght):
@@ -530,6 +536,20 @@ class MCConvertExecute:
         self.exit_interpret = True
         return leng
 
+    def targetSpace(self):
+        i = self.prt + self.local_prt
+        leng = 0
+        while(i < self.oldExeLenght):
+            if (self.oldExecute[i] == "\\"):
+                i = i+2
+                leng = leng +2
+            if (self.oldExecute[i] == '\"'):
+                return leng +1
+            i = i+1
+            leng = leng+1
+        self.exit_interpret = True
+        return 0
+
     def SpaceEnd(self):
         i = self.prt + self.local_prt
         leng = 0
@@ -546,6 +566,7 @@ class MCConvertExecute:
 
     def ifexit(self,bool):
         return (not self.exit_interpret and bool)
+
 
 class GetBDXPath:
     def __init__(self):
