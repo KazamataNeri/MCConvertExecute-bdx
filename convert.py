@@ -275,7 +275,9 @@ class BDump:
             return self.ChestData(6,slotCount)
 
         if (bdxData[i] == 88):
-            print("停止读入")
+            print("command: 终止符在bdx文件内 {:.1f}% 的位置".format(self.prt/self.bdxDataLen*100))
+            print("------- {:.1f}% ------".format(self.prt/self.bdxDataLen*100))
+            print("停止读入\n")
             self.newBdxData = self.newBdxData + b"X"
             self.prt = self.bdxDataLen +1
         return 1
@@ -315,7 +317,7 @@ class MCConvertExecute:
         if (oldExecute[0] != "/"):
             if (self.isalpha(oldExecute[0])):
                 oldExecute = "/" + oldExecute
-        if (not (oldExecute[:9] == "/execute " or oldExecute[:9] == "/Execute ")):
+        if (not (oldExecute[:8] == "/execute" or oldExecute[:8] == "/Execute")):
             return oldExecute
         #------
         while(self.exit()):
@@ -368,8 +370,8 @@ class MCConvertExecute:
             oldExe = "/" + oldExe 
             self.prt = self.prt - 1
         
-        if (self.ifexit(oldExe[:9] == "/execute " or oldExe[:9] == "/Execute ")):
-            self.local_prt = 9
+        if (self.ifexit(oldExe[:8] == "/execute" or oldExe[:8] == "/Execute")):
+            self.local_prt = 8
             execute_list.append("/execute")
             self.local_prt_Add(self.SpaceEnd())
         else:
@@ -513,6 +515,9 @@ class MCConvertExecute:
         leng = 0
         jump = False
         while(i < self.oldExeLenght):
+            if (jump and self.oldExecute[i] == "\\"):
+                i = i+2
+                leng = leng +2
             if (self.oldExecute[i] == '"'):
                 if (jump):
                     jump = False
