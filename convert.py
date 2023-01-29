@@ -349,7 +349,7 @@ class MCConvertExecute:
                 if (Command_header):
                     execstr = execstr + exe_list[0] + " "
                     Command_header = False
-                execstr = execstr + "at "+ exe_list[1] +" as @s "
+                execstr = execstr + "as "+ exe_list[1] +" at @s "
                 if (exe_list[2] != "~ ~ ~"):
                     execstr = execstr + "positioned " + exe_list[2] + " "
                 if (spexe.list_len == 7):
