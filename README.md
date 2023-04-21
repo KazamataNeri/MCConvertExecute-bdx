@@ -1,3 +1,5 @@
+**注意：此项目将会重构，旧方法请见 `LegacyMethod` 文件夹**
+
 # MCConvertExecut-bdx
 适用于bdx文件的execute语法转换器
 ***
