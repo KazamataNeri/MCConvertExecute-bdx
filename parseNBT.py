@@ -16,7 +16,7 @@ def getName(buffer:io.BytesIO) -> str:
     keyLength = struct.unpack(f'{endian}h',buffer.read(2))[0]
     return str(buffer.read(keyLength))[2:-1]    
 
-def getValue(buffer:io.BytesIO,valueType:int) -> nbtlib.tag.Byte|nbtlib.tag.Short|nbtlib.tag.Int|nbtlib.tag.Long|nbtlib.tag.Float|nbtlib.tag.Double|nbtlib.tag.ByteArray|nbtlib.tag.String|nbtlib.tag.List[any]|nbtlib.tag.Compound|nbtlib.tag.IntArray|nbtlib.tag.LongArray:
+def getValue(buffer:io.BytesIO,valueType:int) -> nbtlib.tag.Byte|nbtlib.tag.Short|nbtlib.tag.Int|nbtlib.tag.Long|nbtlib.tag.Float|nbtlib.tag.Double|nbtlib.tag.ByteArray|nbtlib.tag.String|nbtlib.tag.List[...]|nbtlib.tag.Compound|nbtlib.tag.IntArray|nbtlib.tag.LongArray:
     match valueType:
         case 1:
             return nbtlib.tag.Byte(buffer.read(1)[0])
@@ -57,7 +57,7 @@ def getArray(buffer:io.BytesIO,valueType:int) -> nbtlib.tag.ByteArray|nbtlib.tag
         case _:
             raise unexpectedError(valueType)
 
-def getList(buffer:io.BytesIO) -> nbtlib.tag.List[any]:
+def getList(buffer:io.BytesIO) -> nbtlib.tag.List[...]:
     valueType = buffer.read(1)[0]
     listLength = struct.unpack(f'{endian}i',buffer.read(4))[0]
     return nbtlib.tag.List([getValue(buffer,valueType) for _ in range(listLength)])
@@ -78,7 +78,7 @@ def getCompound(buffer:io.BytesIO) -> nbtlib.tag.Compound:
         result[name] = getValue(buffer,valueType)
         # set values
 
-def parse(buffer:io.BytesIO) -> tuple[nbtlib.tag.Byte|nbtlib.tag.Short|nbtlib.tag.Int|nbtlib.tag.Long|nbtlib.tag.Float|nbtlib.tag.Double|nbtlib.tag.ByteArray|nbtlib.tag.String|nbtlib.tag.List[any]|nbtlib.tag.Compound|nbtlib.tag.IntArray|nbtlib.tag.LongArray,str]:
+def parse(buffer:io.BytesIO) -> tuple[nbtlib.tag.Byte|nbtlib.tag.Short|nbtlib.tag.Int|nbtlib.tag.Long|nbtlib.tag.Float|nbtlib.tag.Double|nbtlib.tag.ByteArray|nbtlib.tag.String|nbtlib.tag.List[...]|nbtlib.tag.Compound|nbtlib.tag.IntArray|nbtlib.tag.LongArray,str]:
     valueType = buffer.read(1)[0]
     name = getName(buffer)
     return getValue(buffer,valueType), name
