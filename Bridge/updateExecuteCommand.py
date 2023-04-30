@@ -20,16 +20,16 @@ def upgradeExecuteCommand(inputPath: str, outputPath: str) -> None:
     for i in readResult:
         match i.operationNumber:
             case 26 | 27 | 34 | 35 | 36:
-                i1: SetCommandBlockData | PlaceBlockWithCommandBlockData | PlaceRuntimeBlockWithCommandBlockData | PlaceRuntimeBlockWithCommandBlockDataAndUint32RuntimeID | PlaceCommandBlockWithCommandBlockData = i
+                i1: SetCommandBlockData | PlaceBlockWithCommandBlockData | PlaceRuntimeBlockWithCommandBlockData | PlaceRuntimeBlockWithCommandBlockDataAndUint32RuntimeID | PlaceCommandBlockWithCommandBlockData = i  # type: ignore
                 # explicit data type
                 commandString: str = str(i1.command)
                 convertResult = ExecuteCommandUpdater(commandString)
                 if convertResult[1] == True:
-                    i1.blockNBT['Command'] = nbtlib.tag.String(
+                    i1.command = nbtlib.tag.String(
                         convertResult[0])
                 # convert
             case 41:
-                i2: PlaceBlockWithNBTData = i
+                i2: PlaceBlockWithNBTData = i  # type: ignore
 
                 def subFunc():
                     # Explicit data type
