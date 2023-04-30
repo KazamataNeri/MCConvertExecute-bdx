@@ -3,6 +3,7 @@ from struct import pack
 import nbtlib
 
 endian: str = '<'
+endianWord: str = 'little'
 
 
 def getValueType(value) -> bytes:
@@ -41,8 +42,7 @@ def marshalToName(writer: BytesIO, name: str) -> None:
 def marshalToValue(writer: BytesIO, value, valueType: int) -> None:
     match valueType:
         case 1:
-            writer.write(value.to_bytes(
-                length=1, byteorder='big', signed=True))
+            writer.write(value.to_bytes(length=1, byteorder=endianWord, signed=True))
         case 2:
             writer.write(pack(f'{endian}h', value))
         case 3:

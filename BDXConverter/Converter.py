@@ -1,47 +1,21 @@
 from BDXConverter.GeneralClass import GeneralClass
 from BDXConverter.Pool import GetBDXCommandPool
+from BDXConverter.ConvertErrorDefine import notAcorrectBDXFileError
+from BDXConverter.ConvertErrorDefine import readError, unknownOperationError
 from Utils.getString import getByte, getString
-from brotli import decompress
+from brotli import compress, decompress
 from io import BytesIO
 from json import dumps
 from copy import deepcopy
 
 
-class notAcorrectBDXFileError(Exception):
+def ReadBDXFile(path: str) -> tuple[list[GeneralClass], str]:
     """
-    Not a correct BDX file error
-    """
-
-    def __init__(self, path: str):
-        Exception.__init__(self, f'"{path}" is not a correct BDX file')
-
-
-class readError(Exception):
-    """
-    BDX file read error
-    """
-
-    def __init__(self, errorOccurredPosition: int):
-        Exception.__init__(
-            self, f'failed to convert this BDX file, and the error occurred at position {errorOccurredPosition}')
-
-
-class unknownOperationError(Exception):
-    """
-    Find unknown operation error
-    """
-
-    def __init__(self, operationId: int, errorOccurredPosition: int):
-        Exception.__init__(
-            self, f'an unknown operation {operationId} was found, and the error occurred at position {errorOccurredPosition}')
-
-
-def ReadBDXFile(path: str) -> list[GeneralClass]:
-    """
-    Convert BDX file into list[GeneralClass]
+    Convert BDX file into list[GeneralClass] and return the author's name
     """
     with open(path, "r+b") as file:
-        fileContext: bytes = b''.join(file.readlines())
+        fileContext: bytes = file.read()
+    file.close()
     # get the context of this bdx file
     if fileContext[0:3] != b'BD@':
         raise notAcorrectBDXFileError(path)
@@ -53,8 +27,8 @@ def ReadBDXFile(path: str) -> list[GeneralClass]:
     bdxCommandPool = GetBDXCommandPool()
     # prepare
     getByte(buffer, 1)
-    getString(buffer)
-    # jump author's information
+    authorName = getString(buffer)
+    # get author's information
     while True:
         commandId = getByte(buffer, 1)
         if commandId[0] in bdxCommandPool:
@@ -76,8 +50,38 @@ def ReadBDXFile(path: str) -> list[GeneralClass]:
             raise unknownOperationError(commandId[0], buffer.seek(0, 1))
             # if we can not find the operation from the command pool
     # read bdx file
-    return result
+    return result, authorName
     # return
+
+
+def ConvertListIntoBDXFile(
+        structs: list[GeneralClass],
+        outputPath: str,
+        authorName: str = 'KazamataNeri/MCConvertExecute-bdx'
+) -> None:
+    """
+    Convert list[GeneralClass] into bytes and write it into a bdx file(outputPath:str).
+
+    Note:
+        - Author's name is no need to write,
+        because this field has been officially deprecated.
+        But we still put the names into this place as symbolically
+    """
+    writer: BytesIO = BytesIO(b'')
+    # request a new writer
+    writer.write(b'BDX\x00'+authorName.encode(encoding='utf-8')+b'\x00')
+    # write inside header(BDX) and author's name
+    for i in structs:
+        writer.write(i.operationNumber.to_bytes(
+            length=1, byteorder='big', signed=False))
+        i.Marshal(writer)
+    # marshal python object into the writer
+    result = b'BD@' + compress(writer.getvalue())
+    # compress writer into bytes and set outside header which named "BD@"
+    with open(outputPath, 'w+b') as file:
+        file.write(result)
+    file.close()
+    # write bytes into a bdx file
 
 
 def ConvertListIntoJSONFile(structs: list[GeneralClass], outputPath: str) -> None:
@@ -98,4 +102,5 @@ def ConvertListIntoJSONFile(structs: list[GeneralClass], outputPath: str) -> Non
     # get string
     with open(outputPath, 'w+', encoding='utf-8') as file:
         file.write(result)
+    file.close()
     # write json datas

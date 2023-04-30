@@ -10,18 +10,6 @@ class GeneralClass:
         self.operationNumber: int
         self.operationName: str
 
-    def OperationNumber(self) -> int:
-        """
-        Get the OperationId(commandId):int of this operation
-        """
-        return self.operationNumber
-
-    def OperationName(self) -> str:
-        """
-        Get the OperationName:str of this operation
-        """
-        return self.operationName
-
     def Marshal(self, writer: BytesIO) -> None:
         """
         Marshal python object which named GeneralClass into the writer
