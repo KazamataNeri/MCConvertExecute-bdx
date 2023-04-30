@@ -1,6 +1,6 @@
 from io import BytesIO
 from BDXConverter.GeneralClass import GeneralClass
-from utils.getString import getString
+from Utils.getString import getString
 
 
 class CreateConstantString(GeneralClass):

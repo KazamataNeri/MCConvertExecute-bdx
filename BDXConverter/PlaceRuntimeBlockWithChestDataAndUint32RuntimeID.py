@@ -1,7 +1,7 @@
 from io import BytesIO
 from BDXConverter.GeneralClass import GeneralClass
 from BDXConverter.StructOfChest import ChestData
-from utils.getByte import getByte
+from Utils.getByte import getByte
 from struct import pack, unpack
 
 

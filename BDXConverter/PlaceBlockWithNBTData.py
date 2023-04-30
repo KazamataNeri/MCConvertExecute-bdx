@@ -1,9 +1,9 @@
 import nbtlib
 from io import BytesIO
 from BDXConverter.GeneralClass import GeneralClass
-from utils.getByte import getByte
-from utils.marshalNBT import MarshalPythonNBTObjectToWriter
-from utils.unmarshalNBT import UnMarshalBufferToPythonNBTObject
+from Utils.getByte import getByte
+from Utils.marshalNBT import MarshalPythonNBTObjectToWriter
+from Utils.unmarshalNBT import UnMarshalBufferToPythonNBTObject
 from struct import pack, unpack
 
 

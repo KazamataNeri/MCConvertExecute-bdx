@@ -1,6 +1,6 @@
 from io import BytesIO
 from BDXConverter.GeneralClass import GeneralClass
-from utils.getString import getByte, getString
+from Utils.getString import getByte, getString
 from struct import pack, unpack
 
 

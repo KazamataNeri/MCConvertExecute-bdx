@@ -1,6 +1,6 @@
 from io import BytesIO
 from BDXConverter.GeneralClass import GeneralClass
-from utils.getByte import getByte
+from Utils.getByte import getByte
 
 
 class UseRuntimeIDPool(GeneralClass):

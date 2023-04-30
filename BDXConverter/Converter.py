@@ -1,6 +1,6 @@
 from BDXConverter.GeneralClass import GeneralClass
 from BDXConverter.Pool import GetBDXCommandPool
-from utils.getString import getByte, getString
+from Utils.getString import getByte, getString
 from brotli import decompress
 from io import BytesIO
 from json import dumps
