@@ -42,7 +42,7 @@ pip install nbtlib
 python main.py [inputPath:string] [outputPath:string]
 ```
 
-当然，您亦可直接执行 `python convert.py`
+当然，您亦可直接执行 `python main.py`
 
 
 
