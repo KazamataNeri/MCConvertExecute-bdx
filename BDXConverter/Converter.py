@@ -5,7 +5,7 @@ from BDXConverter.ConvertErrorDefine import readError, unknownOperationError
 from Utils.getString import getByte, getString
 from brotli import compress, decompress
 from io import BytesIO
-from json import dumps
+from json import loads, dumps
 from copy import deepcopy
 
 
@@ -24,7 +24,7 @@ def ReadBDXFile(path: str) -> tuple[list[GeneralClass], str]:
         raise notAcorrectBDXFileError(path)
     # check header and create new buffer
     result: list[GeneralClass] = []
-    bdxCommandPool = GetBDXCommandPool()
+    bdxCommandPool: dict[int, GeneralClass] = GetBDXCommandPool()
     # prepare
     getByte(buffer, 1)
     authorName = getString(buffer)
@@ -54,7 +54,7 @@ def ReadBDXFile(path: str) -> tuple[list[GeneralClass], str]:
     # return
 
 
-def ConvertListIntoBDXFile(
+def DumpStructs(
         structs: list[GeneralClass],
         outputPath: str,
         authorName: str = 'KazamataNeri/MCConvertExecute-bdx'
@@ -84,7 +84,7 @@ def ConvertListIntoBDXFile(
     # write bytes into a bdx file
 
 
-def ConvertListIntoJSONFile(structs: list[GeneralClass], outputPath: str) -> None:
+def VisualStructs(structs: list[GeneralClass], outputPath: str) -> None:
     """
     Convert list[GeneralClass] into json data and write it into outputPath:str
     """
@@ -104,3 +104,32 @@ def ConvertListIntoJSONFile(structs: list[GeneralClass], outputPath: str) -> Non
         file.write(result)
     file.close()
     # write json datas
+
+
+def ConvertJSONFileIntoStructs(path: str) -> list[GeneralClass]:
+    """
+    Read json datas from path:str and convert it into list[GeneralClass]
+    """
+    with open(path, 'r+', encoding='utf-8') as file:
+        fileContext: str = file.read()
+    jsonDatas: list[dict] = loads(fileContext)
+    # load json datas from file
+    result: list[GeneralClass] = []
+    bdxCommandPool: dict[int, GeneralClass] = GetBDXCommandPool()
+    # prepare
+    for i in jsonDatas:
+        if not 'operationNumber' in i:
+            continue
+        operationNumber: int = i['operationNumber']
+        if not operationNumber in bdxCommandPool:
+            continue
+        # get operation number
+        struct: GeneralClass = deepcopy(bdxCommandPool[operationNumber])
+        # request a new struct
+        struct.Loads(i)
+        # load datas
+        result.append(struct)
+        # submit single struct
+    # load datas from json dict
+    return result
+    # return

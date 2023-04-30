@@ -1,5 +1,5 @@
 import nbtlib
-from BDXConverter.Converter import ReadBDXFile, ConvertListIntoBDXFile
+from BDXConverter.Converter import ReadBDXFile, DumpStructs
 from CommandUpdater.updater import ExecuteCommandUpdater
 
 from BDXConverter.SetCommandBlockData import SetCommandBlockData
@@ -50,5 +50,5 @@ def upgradeExecuteCommand(inputPath: str, outputPath: str) -> None:
                 subFunc()
                 # execute the subFunc
     # upgrade execute command
-    ConvertListIntoBDXFile(readResult, outputPath)
+    DumpStructs(readResult, outputPath)
     # write result

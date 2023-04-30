@@ -12,24 +12,24 @@ class GeneralClass:
 
     def Marshal(self, writer: BytesIO) -> None:
         """
-        Marshal python object which named GeneralClass into the writer
+        Marshal GeneralClass into the writer
         """
         ...
 
     def UnMarshal(self, buffer: BytesIO) -> None:
         """
-        Unmarshal buffer(io object) into the python object which named GeneralClass
+        Unmarshal the buffer(io object) into GeneralClass
         """
         ...
 
     def Loads(self, jsonDict: dict) -> None:
         """
-        Convert jsonDict:dict into python object which named GeneralClass
+        Convert jsonDict:dict into GeneralClass
         """
         ...
 
     def Dumps(self) -> dict:
         """
-        Convert python object which named GeneralClass into dictionary
+        Convert GeneralClass into basic dictionary
         """
         return self.__dict__
