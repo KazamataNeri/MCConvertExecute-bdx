@@ -96,5 +96,5 @@ apt install python && apt install git && pip install brotli -i http://pypi.douba
 # 免责声明
 - 基于使用此工具而造成的各种问题，请自行承担
 - 此项目的所有贡献者将保留有关此工具的所有解释权
-- 此项目使用 [`GNU General Public License v3.0`](https://github.com/KazamataNeri/MCConvertExecute-bdx/blob/main/LICENSE) 协议进行许可和授权
+- 此项目使用 [`GNU Affero General Public License v3.0`](https://github.com/KazamataNeri/MCConvertExecute-bdx/blob/main/LICENSE) 协议进行许可和授权
 - 当且仅当征得此项目所有贡献者的同意后，您才可以将此项目商业化
