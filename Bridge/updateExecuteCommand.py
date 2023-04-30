@@ -30,9 +30,9 @@ def upgradeExecuteCommand(inputPath: str, outputPath: str) -> None:
                 # convert
             case 41:
                 i2: PlaceBlockWithNBTData = i  # type: ignore
+                # explicit data type
 
                 def subFunc():
-                    # Explicit data type
                     if not 'id' in i2.blockNBT:
                         return
                     if i2.blockNBT['id'] != nbtlib.tag.String('CommandBlock'):
