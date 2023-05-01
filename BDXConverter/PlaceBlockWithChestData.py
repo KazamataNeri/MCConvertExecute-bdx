@@ -15,9 +15,9 @@ class PlaceBlockWithChestData(GeneralClass):
         self.data: ChestData = ChestData()
 
     def Marshal(self, writer: BytesIO) -> None:
-        self.data.slotCount = self.slotCount
         writer.write(pack('>H', self.blockConstantStringID) + pack('>H', self.blockData) +
-                     self.slotCount.to_bytes(length=1, byteorder='big', signed=False) + self.data.Marshal())
+                     self.slotCount.to_bytes(length=1, byteorder='big', signed=False))
+        self.data.Marshal(writer)
 
     def UnMarshal(self, buffer: BytesIO) -> None:
         self.blockConstantStringID = unpack('>H', getByte(buffer, 2))[0]
@@ -29,12 +29,12 @@ class PlaceBlockWithChestData(GeneralClass):
     def Loads(self, jsonDict: dict) -> None:
         self.blockConstantStringID = jsonDict['blockConstantStringID'] if 'blockConstantStringID' in jsonDict else 0
         self.blockData = jsonDict['blockData'] if 'blockData' in jsonDict else 0
-        self.slotCount = jsonDict['slotCount'] if 'slotCount' in jsonDict else 0
+        # self.slotCount = jsonDict['slotCount'] if 'slotCount' in jsonDict else 0
         newChestData = ChestData()
         if 'data' in jsonDict:
             newChestData.Loads(jsonDict['data'])
+        self.slotCount = self.data.slotCount
         self.data = newChestData
-        self.data.slotCount = self.slotCount
 
     def Dumps(self) -> dict:
         result: dict = {

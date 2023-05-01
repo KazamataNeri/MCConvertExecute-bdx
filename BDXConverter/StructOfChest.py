@@ -15,8 +15,9 @@ class ChestSlot(GeneralClass):
         self.data: int = 0
         self.slotID: int = 0
 
-    def Marshal(self) -> bytes:
-        return self.itemName.encode(encoding='utf-8') + b'\x00' + self.count.to_bytes(length=1, byteorder='big', signed=False) + pack('>H', self.data) + self.slotID.to_bytes(length=1, byteorder='big', signed=False)
+    def Marshal(self, writer: BytesIO) -> None:
+        writer.write(self.itemName.encode(encoding='utf-8') + b'\x00' + self.count.to_bytes(length=1, byteorder='big',
+                     signed=False) + pack('>H', self.data) + self.slotID.to_bytes(length=1, byteorder='big', signed=False))
 
     def UnMarshal(self, buffer: BytesIO) -> None:
         self.itemName = getString(buffer)
@@ -40,8 +41,9 @@ class ChestData(GeneralClass):
         self.slotCount: int = 0
         self.chestData: list[ChestSlot] = []
 
-    def Marshal(self) -> bytes:
-        return b''.join([self.chestData[i].Marshal() for i in range(self.slotCount)])
+    def Marshal(self, writer: BytesIO) -> None:
+        for i in self.chestData:
+            i.Marshal(writer)
 
     def UnMarshal(self, buffer: BytesIO) -> None:
         self.chestData = []
@@ -57,6 +59,7 @@ class ChestData(GeneralClass):
             newSlot = ChestSlot()
             newSlot.Loads(i)
             self.chestData.append(newSlot)
+        self.slotCount = len(self.chestData)
 
     def Dumps(self) -> list[dict]:
         result: list[dict] = []
