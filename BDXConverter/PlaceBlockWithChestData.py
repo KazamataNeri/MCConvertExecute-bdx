@@ -34,6 +34,7 @@ class PlaceBlockWithChestData(GeneralClass):
         if 'data' in jsonDict:
             newChestData.Loads(jsonDict['data'])
         self.data = newChestData
+        self.data.slotCount = self.slotCount
 
     def Dumps(self) -> dict:
         result: dict = {
