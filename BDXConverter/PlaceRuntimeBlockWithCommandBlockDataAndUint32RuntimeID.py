@@ -20,7 +20,7 @@ class PlaceRuntimeBlockWithCommandBlockDataAndUint32RuntimeID(GeneralClass):
         self.needsRedstone: bool = False
 
     def Marshal(self, writer: BytesIO) -> None:
-        writer.write(pack('>I', self.runtimeId) + pack('>I', self.mode) + self.command.encode(encoding='utf-8') + b'\x00' + self.customName.encode(encoding='utf-8') + b'\x00' + self.lastOutput.encode(encoding='utf-8') + b'\x00' + pack('>i', self.tickdelay) +
+        writer.write(pack('>I', self.runtimeId) + pack('>I', self.mode) + self.command.encode(encoding='utf-8') + b'\x00' + self.customName.encode(encoding='utf-8') + b'\x00' + self.lastOutput.encode(encoding='utf-8') + b'\x00' + pack('>I', self.tickdelay) +
                      self.executeOnFirstTick.to_bytes(length=1, byteorder='big', signed=False) + self.trackOutput.to_bytes(length=1, byteorder='big', signed=False) + self.conditional.to_bytes(length=1, byteorder='big', signed=False) + self.needsRedstone.to_bytes(length=1, byteorder='big', signed=False))
 
     def UnMarshal(self, buffer: BytesIO) -> None:
@@ -29,7 +29,7 @@ class PlaceRuntimeBlockWithCommandBlockDataAndUint32RuntimeID(GeneralClass):
         self.command = getString(buffer)
         self.customName = getString(buffer)
         self.lastOutput = getString(buffer)
-        self.tickdelay = unpack('>i', getByte(buffer, 4))[0]
+        self.tickdelay = unpack('>I', getByte(buffer, 4))[0]
         self.executeOnFirstTick = bool(getByte(buffer, 1)[0])
         self.trackOutput = bool(getByte(buffer, 1)[0])
         self.conditional = bool(getByte(buffer, 1)[0])
