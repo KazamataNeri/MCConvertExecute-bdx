@@ -15,8 +15,9 @@ class PlaceRuntimeBlockWithChestDataAndUint32RuntimeID(GeneralClass):
 
     def Marshal(self, writer: BytesIO) -> None:
         self.data.slotCount = self.slotCount
-        writer.write(pack('>I', self.runtimeId) + self.slotCount.to_bytes(length=1,
-                     byteorder='big', signed=False) + self.data.Marshal())
+        writer.write(pack('>I', self.runtimeId) +
+                     self.slotCount.to_bytes(length=1, byteorder='big', signed=False))
+        self.data.Marshal(writer)
 
     def UnMarshal(self, buffer: BytesIO) -> None:
         self.runtimeId = unpack('>I', getByte(buffer, 4))[0]
