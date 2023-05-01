@@ -15,6 +15,7 @@ class PlaceBlockWithChestData(GeneralClass):
         self.data: ChestData = ChestData()
 
     def Marshal(self, writer: BytesIO) -> None:
+        self.slotCount = len(self.data.chestData)
         writer.write(pack('>H', self.blockConstantStringID) + pack('>H', self.blockData) +
                      self.slotCount.to_bytes(length=1, byteorder='big', signed=False))
         self.data.Marshal(writer)
@@ -42,7 +43,7 @@ class PlaceBlockWithChestData(GeneralClass):
             'operationNumber': self.operationNumber,
             'blockConstantStringID': self.blockConstantStringID,
             'blockData': self.blockData,
-            'slotCount': self.slotCount,
+            'slotCount': len(self.data.chestData),
             'data': self.data.Dumps()
         }
         return result
