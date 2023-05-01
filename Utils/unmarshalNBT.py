@@ -71,11 +71,9 @@ def getCompound(buffer: BytesIO) -> nbtlib.tag.Compound:
     result: dict = {}
     while True:
         nextBuffer = getByte(buffer, 1)
-        if len(nextBuffer) <= 0:
-            raise EOFError
         if nextBuffer == b'\x00':
             return nbtlib.tag.Compound(result)
-        # if meet EOF or TAG_End
+        # if meet TAG_End
         buffer.seek(-1, 1)
         # correct the pointer
         valueType = getByte(buffer, 1)[0]
