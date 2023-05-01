@@ -50,12 +50,6 @@ class ChestData(GeneralClass):
             newSlot.UnMarshal(buffer)
             self.chestData.append(newSlot)
 
-    def Dumps(self) -> list[dict]:
-        result: list[dict] = []
-        for i in self.chestData:
-            result.append(i.Dumps())
-        return result
-
     def Loads(self, jsonList: list[dict]) -> None:
         self.slotCount = len(jsonList)
         self.chestData = []
@@ -63,3 +57,9 @@ class ChestData(GeneralClass):
             newSlot = ChestSlot()
             newSlot.Loads(i)
             self.chestData.append(newSlot)
+
+    def Dumps(self) -> list[dict]:
+        result: list[dict] = []
+        for i in self.chestData:
+            result.append(i.Dumps())
+        return result
