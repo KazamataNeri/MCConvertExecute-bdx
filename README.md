@@ -25,11 +25,10 @@ _[注：现在尚且还未支持 `detect block` 中 `方块数据值` 的升级�
 
 
 # 依赖项
-本项目依赖 `brotli` 和 `nbtlib` 库，因此您需要逐一执行下述伪代码以安装它们。
+本项目依赖于 `BDXConverter` 库，因此您需要执行下述命令以安装其。
 
 ```
-pip install brotli
-pip install nbtlib
+pip install BDXConverter
 ```
 
 
@@ -51,7 +50,11 @@ python main.py [inputPath:string] [outputPath:string]
 # 在 `Termux` 上从源代码运行程序
 ## 注意事项
 - 您应该授予 `Termux` 存储权限，否则您将无法运行本程序
-- `Python 3.11.3` 尚且还未支持 `nbtlib` 库的依赖库 `numpy` ，因此您可能需要回退 `Python` 版本才能顺利使用此工具
+- 如果您在安装 `BDXConverter` 库时遭遇了错误，请尝试执行下述命令
+
+   ```
+   pkg i python-numpy && pip install BDXConverter
+   ```
 
 
 
