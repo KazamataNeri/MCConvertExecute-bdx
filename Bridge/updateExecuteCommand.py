@@ -1,5 +1,5 @@
 import nbtlib
-from BDXConverter.Converter.Converter import ReadBDXFile, DumpStructs
+from BDXConverter.Converter.FileOperation import ReadBDXFile, DumpStructs
 from CommandUpdater.updater import ExecuteCommandUpdater
 
 from BDXConverter.Operation.SetCommandBlockData import SetCommandBlockData
@@ -15,9 +15,9 @@ def upgradeExecuteCommand(inputPath: str, outputPath: str) -> None:
     Upgrade the execute command in the file of the
     inputPath:str and output it in the outPath:str
     """
-    readResult, _ = ReadBDXFile(inputPath)
+    readResult = ReadBDXFile(inputPath)
     # read bdx file
-    for i in readResult:
+    for i in readResult.BDXContent:
         match i.operationNumber:
             case 26 | 27 | 34 | 35 | 36:
                 i1: SetCommandBlockData | PlaceBlockWithCommandBlockData | PlaceRuntimeBlockWithCommandBlockData | PlaceRuntimeBlockWithCommandBlockDataAndUint32RuntimeID | PlaceCommandBlockWithCommandBlockData = i  # type: ignore
