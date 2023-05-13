@@ -50,5 +50,6 @@ def upgradeExecuteCommand(inputPath: str, outputPath: str) -> None:
                 subFunc()
                 # execute the subFunc
     # upgrade execute command
+    readResult.AuthorName = 'KazamataNeri/MCConvertExecute-bdx'
     DumpStructs(readResult, outputPath)
     # write result
