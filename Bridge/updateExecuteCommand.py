@@ -17,7 +17,7 @@ def upgradeExecuteCommand(inputPath: str, outputPath: str) -> None:
     """
     readResult = ReadBDXFile(inputPath)
     # read bdx file
-    for i in readResult.BDXContent:
+    for i in readResult.BDXContents:
         match i.operationNumber:
             case 26 | 27 | 34 | 35 | 36:
                 i1: SetCommandBlockData | PlaceBlockWithCommandBlockData | PlaceRuntimeBlockWithCommandBlockData | PlaceRuntimeBlockWithCommandBlockDataAndUint32RuntimeID | PlaceCommandBlockWithCommandBlockData = i  # type: ignore
