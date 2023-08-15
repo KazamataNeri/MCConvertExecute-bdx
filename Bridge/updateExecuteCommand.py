@@ -51,5 +51,6 @@ def upgradeExecuteCommand(inputPath: str, outputPath: str) -> None:
                 # execute the subFunc
     # upgrade execute command
     readResult.AuthorName = 'KazamataNeri/MCConvertExecute-bdx'
+    readResult.Signature.signedOrNeedToSign = False
     DumpStructs(readResult, outputPath)
     # write result
